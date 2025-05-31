@@ -1,7 +1,7 @@
 import streamlit as st
 import json
 import os
- # Removido checklist_utils
+import export_utils  # Adicionado import faltante
 
 st.set_page_config(page_title="Avaliação Crítica JBI", layout="wide")
 
@@ -12,7 +12,7 @@ st.markdown("Carregue um **artigo em PDF**, escolha o **delineamento metodológi
 CHECKLIST_JSON_PATH = os.path.join('data', 'checklists.json')
 
 # Função para carregar checklists do JSON
-@st.cache_data # Cache para evitar recarregar a cada interação
+@st.cache_data  # Cache para evitar recarregar a cada interação
 def load_checklists(json_path):
     try:
         with open(json_path, 'r', encoding='utf-8') as f:
@@ -26,10 +26,6 @@ def load_checklists(json_path):
 
 # Carrega os dados dos checklists
 all_checklists_data = load_checklists(CHECKLIST_JSON_PATH)
-
-
-
-
 
 # Informações do artigo e avaliador
 st.subheader("📌 Informações do artigo")
@@ -50,27 +46,23 @@ else:
     option = st.selectbox("Escolha o tipo de estudo:", study_types)
 
     if option:
-        # Obtém o checklist selecionado do dicionário carregado
         checklist = all_checklists_data.get(option, [])
-        
+
         if not checklist:
-             st.warning(f"Checklist para '{option}' está vazio ou não foi carregado corretamente.")
+            st.warning(f"Checklist para '{option}' está vazio ou não foi carregado corretamente.")
         else:
             st.write(f"**Checklist para {option}:**")
-            
+
             responses = []
 
             for i, question in enumerate(checklist):
                 st.write(f"**{i + 1}. {question}**")
-                # Usar colunas pode não ser ideal em todas as larguras, mas mantém o layout original
-                cols = st.columns([1, 3]) 
-                
+                cols = st.columns([1, 3])
+
                 with cols[0]:
-                    # Usar um ID único para cada widget é crucial no Streamlit
-                    answer = st.radio("Resposta:", ["Sim", "Não", "Incerteza", "Não aplicável"], key=f"resp_{option}_{i}") 
+                    answer = st.radio("Resposta:", ["Sim", "Não", "Incerteza", "Não aplicável"], key=f"resp_{option}_{i}")
                 with cols[1]:
-                    # Usar um valor padrão vazio ou o texto selecionado se disponível
-                    default_snippet = selected_text if 'selected_text' in locals() else ""
+                    default_snippet = ""
                     snippet = st.text_area("Comentário:", value=default_snippet, key=f"snip_{option}_{i}")
 
                 responses.append({
@@ -81,14 +73,13 @@ else:
 
             if st.button("📤 Exportar resumo em PDF"):
                 try:
-                    # Passa o tipo de estudo para a função de exportação
                     pdf_bytes = export_utils.export_summary_to_pdf(option, responses, {
-    "nome_examinador": nome_examinador,
-    "data_avaliacao": str(data_avaliacao),
-    "titulo_artigo": titulo_artigo,
-    "autor_artigo": autor_artigo,
-    "ano_artigo": ano_artigo
-})
+                        "nome_examinador": nome_examinador,
+                        "data_avaliacao": str(data_avaliacao),
+                        "titulo_artigo": titulo_artigo,
+                        "autor_artigo": autor_artigo,
+                        "ano_artigo": ano_artigo
+                    })
                     st.download_button(
                         label="📥 Baixar Resumo PDF",
                         data=pdf_bytes,
@@ -98,4 +89,3 @@ else:
                     st.success("✅ Resumo gerado com sucesso. Clique no botão acima para baixar.")
                 except Exception as e:
                     st.error(f"Erro ao gerar o PDF: {e}")
-
