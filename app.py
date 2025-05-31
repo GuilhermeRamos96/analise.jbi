@@ -1,11 +1,12 @@
 import streamlit as st
 import json
 import os
- 
+ # Removido checklist_utils
+
 st.set_page_config(page_title="Avaliação Crítica JBI", layout="wide")
 
-st.title("📄 Sistema de Avaliação Crítica de Artigos Científicos - JBI")
-st.markdown("Escolha o **delineamento metodológico** e preencha o **checklist interativo**.")
+st.title("📄 Sistema de Avaliação Crítica de Artigos Científicos")
+st.markdown("Carregue um **artigo em PDF**, escolha o **delineamento metodológico** e preencha o **checklist interativo**.")
 
 # Caminho para o arquivo JSON de checklists
 CHECKLIST_JSON_PATH = os.path.join('data', 'checklists.json')
@@ -28,6 +29,15 @@ all_checklists_data = load_checklists(CHECKLIST_JSON_PATH)
 
 
 
+
+
+# Informações do artigo e avaliador
+st.subheader("📌 Informações do artigo")
+nome_examinador = st.text_input("Nome do examinador:")
+data_avaliacao = st.date_input("Data da avaliação:")
+titulo_artigo = st.text_input("Título do artigo:")
+autor_artigo = st.text_input("Autor do artigo:")
+ano_artigo = st.text_input("Ano do artigo:")
 
 st.subheader("✅ Seleção do delineamento metodológico")
 
@@ -72,7 +82,13 @@ else:
             if st.button("📤 Exportar resumo em PDF"):
                 try:
                     # Passa o tipo de estudo para a função de exportação
-                    pdf_bytes = export_utils.export_summary_to_pdf(option, responses)
+                    pdf_bytes = export_utils.export_summary_to_pdf(option, responses, {
+    "nome_examinador": nome_examinador,
+    "data_avaliacao": str(data_avaliacao),
+    "titulo_artigo": titulo_artigo,
+    "autor_artigo": autor_artigo,
+    "ano_artigo": ano_artigo
+})
                     st.download_button(
                         label="📥 Baixar Resumo PDF",
                         data=pdf_bytes,
