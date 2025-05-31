@@ -1,7 +1,7 @@
 import streamlit as st
 import json
 import os
-from modules import pdf_utils, export_utils # Removido checklist_utils
+ # Removido checklist_utils
 
 st.set_page_config(page_title="Avaliação Crítica JBI", layout="wide")
 
@@ -27,23 +27,8 @@ def load_checklists(json_path):
 # Carrega os dados dos checklists
 all_checklists_data = load_checklists(CHECKLIST_JSON_PATH)
 
-if 'selected_snippets' not in st.session_state:
-    st.session_state.selected_snippets = {}
 
-pdf_file = st.file_uploader("➡️ Carregar artigo PDF", type=["pdf"])
 
-if pdf_file:
-    try:
-        pages, num_pages = pdf_utils.extract_text_from_pdf(pdf_file)
-        page = st.slider("📄 Página para visualização:", 1, num_pages, 1)
-        
-        with st.expander("🔍 Visualizar página selecionada"):
-            st.text_area("Texto da Página:", pages[page - 1], height=300)
-
-        selected_text = st.text_area("✂️ Selecione e copie aqui o trecho relevante do artigo:", "")
-    except Exception as e:
-        st.error(f"Erro ao processar o PDF: {e}")
-        st.stop()
 
 st.subheader("✅ Seleção do delineamento metodológico")
 
@@ -77,7 +62,7 @@ else:
                 with cols[1]:
                     # Usar um valor padrão vazio ou o texto selecionado se disponível
                     default_snippet = selected_text if 'selected_text' in locals() else ""
-                    snippet = st.text_area("Trecho associado:", value=default_snippet, key=f"snip_{option}_{i}")
+                    snippet = st.text_area("Comentário:", value=default_snippet, key=f"snip_{option}_{i}")
 
                 responses.append({
                     "question": question,
