@@ -11,14 +11,15 @@ def export_summary_to_pdf(study_type, responses):
     pdf.multi_cell(0, 10, f"Resumo da Avaliação Crítica\nTipo de Estudo: {study_type}\n\n")
 
     for i, item in enumerate(responses):
-        pdf.set_font("DejaVu", "B", size=10) # Bold for question
+        pdf.add_font("DejaVu", "B", "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", uni=True)
+    pdf.set_font("DejaVu", "B", size=10) # Bold for question
         # Corrected f-string syntax: using single quotes inside
         pdf.multi_cell(0, 8, f"{i + 1}. {item['question']}") 
         pdf.set_font("DejaVu", "", size=10) # Regular for answer/snippet
         # Corrected f-string syntax: using single quotes inside
         pdf.multi_cell(0, 8, f"   Resposta: {item['answer']}") 
         # Corrected f-string syntax: using single quotes inside
-        pdf.multi_cell(0, 8, f"   Trecho: {item['snippet']}") 
+        pdf.multi_cell(0, 8, f"   Comentário: {item['snippet']}") 
         pdf.ln(3) # Add a bit more space between items
 
     # Output PDF to a byte string
