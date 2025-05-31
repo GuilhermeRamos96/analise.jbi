@@ -1,0 +1,92 @@
+{
+  "Revisões Sistemáticas e Sínteses de Pesquisa": [
+    "A questão da revisão está clara e explicitamente declarada?",
+    "Os critérios de inclusão foram apropriados para a questão da revisão?",
+    "A estratégia de busca foi apropriada?",
+    "As fontes e recursos utilizados para buscar estudos foram adequados?",
+    "Os critérios para avaliar os estudos foram apropriados?",
+    "A avaliação crítica foi conduzida por dois ou mais revisores independentemente?",
+    "Houve métodos para minimizar erros na extração de dados?",
+    "Os métodos usados para combinar os estudos foram apropriados?",
+    "Foi apropriado combinar os estudos? Os revisores avaliaram a heterogeneidade estatisticamente e forneceram alguma explicação para a heterogeneidade que possa estar presente? Frequentemente, onde estudos heterogêneos são incluídos na revisão sistemática, a síntese narrativa será um método apropriado para apresentar os resultados de múltiplos estudos. Se for uma revisão qualitativa, os métodos utilizados para sintetizar os achados são congruentes com a metodologia declarada da revisão? Existe informação descritiva e explicativa adequada para apoiar os achados finais sintetizados que foram construídos a partir dos achados provenientes da pesquisa original?",
+    "A probabilidade de viés de publicação foi avaliada?",
+    "As recomendações para políticas e/ou práticas foram apoiadas pelos dados relatados?",
+    "As diretrizes específicas para novas pesquisas foram apropriadas?"
+  ],
+  "Pesquisa Qualitativa": [
+    "A metodologia do estudo é apropriada para abordar a questão de pesquisa? Por exemplo: Um relatório pode afirmar que a questão de pesquisa era buscar entendimentos sobre o significado da dor em um grupo de pessoas com artrite reumatoide e que uma abordagem fenomenológica foi adotada. Aqui, há congruência entre esta questão e a metodologia. Um relatório pode afirmar que a questão de pesquisa era estabelecer os efeitos do aconselhamento na gravidade da experiência da dor e que uma abordagem etnográfica foi seguida. Uma questão que tenta estabelecer causa e efeito não pode ser abordada usando uma abordagem etnográfica (pois a etnografia se propõe a desenvolver entendimentos de práticas culturais) e, portanto, isso seria incongruente.",
+    "Os métodos de coleta de dados são apropriados para a metodologia? Por exemplo:",
+    "Os dados são analisados e representados de maneiras congruentes com a posição metodológica declarada? Por exemplo:",
+    "Os resultados são interpretados de maneiras apropriadas para a metodologia? Por exemplo:",
+    "As crenças e valores, e sua potencial influência no estudo, são declarados? Por exemplo:",
+    "O potencial do pesquisador de influenciar o estudo e o potencial do próprio processo de pesquisa de influenciar o pesquisador e suas interpretações são reconhecidos e abordados? Por exemplo:",
+    "A relação entre o pesquisador e os participantes do estudo é abordada? O pesquisador examina criticamente seu próprio papel e influência potencial durante a coleta de dados? É relatado como o pesquisador respondeu aos eventos que surgiram durante o estudo?"
+  ],
+  "Estudos de Prevalência": [
+    "O quadro amostral foi apropriado para abordar a população-alvo?",
+    "Os participantes do estudo foram recrutados de forma apropriada?",
+    "O tamanho da amostra foi adequado?",
+    "Os sujeitos e o cenário do estudo foram descritos em detalhes?",
+    "A análise de dados foi conduzida com cobertura suficiente da amostra identificada?",
+    "Foram utilizados métodos válidos para a identificação da condição?",
+    "A condição foi medida de forma padronizada e confiável para todos os participantes?",
+    "Houve análise estatística apropriada?",
+    "A taxa de resposta foi adequada e, caso contrário, a baixa taxa de resposta foi gerenciada apropriadamente?"
+  ],
+  "Relatos de Caso": [
+    "As características demográficas do paciente foram claramente descritas?",
+    "A história do paciente foi claramente descrita e apresentada como uma linha do tempo?",
+    "A condição clínica atual do paciente na apresentação foi claramente descrita?",
+    "Os testes ou métodos diagnósticos e os resultados foram claramente descritos?",
+    "A(s) intervenção(ões) ou procedimento(s) de tratamento foi(ram) claramente descrito(s)?",
+    "A condição clínica pós-intervenção foi claramente descrita?",
+    "Eventos adversos (danos) ou eventos não antecipados foram identificados e descritos?"
+  ],
+  "Estudos de Caso-Controle": [
+    "Os grupos eram comparáveis, exceto pela presença da doença nos casos ou ausência da doença nos controles?",
+    "Casos e controles foram pareados apropriadamente?",
+    "Foram utilizados os mesmos critérios para identificação de casos e controles?",
+    "A exposição foi medida de forma padronizada, válida e confiável?",
+    "A exposição foi medida da mesma forma para casos e controles?",
+    "Fatores de confusão foram identificados?",
+    "As estratégias para lidar com fatores de confusão foram declaradas?",
+    "Os desfechos foram avaliados de forma padronizada, válida e confiável para casos e controles?",
+    "O período de exposição de interesse foi longo o suficiente para ser significativo?",
+    "Foi utilizada análise estatística apropriada?"
+  ],
+  "Série de Casos": [
+    "Havia critérios claros para inclusão na série de casos?",
+    "A condição foi medida de forma padronizada e confiável para todos os participantes incluídos na série de casos?",
+    "Foram utilizados métodos válidos para identificação da condição para todos os participantes incluídos na série de casos?",
+    "A série de casos teve inclusão consecutiva de participantes?",
+    "A série de casos teve inclusão completa de participantes?",
+    "Houve relato claro da demografia dos participantes no estudo?",
+    "Houve relato claro das informações clínicas dos participantes?",
+    "Os desfechos ou resultados de acompanhamento dos casos foram claramente relatados?",
+    "Houve relato claro das informações demográficas do(s) local(is)/clínica(s) de apresentação?",
+    "A análise estatística foi apropriada?"
+  ],
+  "Estudos Transversais Analíticos": [
+    "Os critérios para inclusão na amostra foram claramente definidos?",
+    "Os sujeitos do estudo e o cenário foram descritos em detalhes?",
+    "A exposição foi medida de maneira válida e confiável?",
+    "Foram utilizados critérios objetivos e padronizados para a medição da condição?",
+    "Fatores de confusão foram identificados?",
+    "Estratégias para lidar com fatores de confusão foram declaradas?",
+    "Os desfechos foram medidos de forma válida e confiável?",
+    "Foi utilizada análise estatística apropriada?"
+  ],
+  "Estudos de Coorte": [
+    "Os dois grupos eram semelhantes e recrutados da mesma população?",
+    "As exposições foram medidas de forma semelhante para atribuir pessoas aos grupos expostos e não expostos?",
+    "A exposição foi medida de forma válida e confiável?",
+    "Fatores de confusão foram identificados?",
+    "Estratégias para lidar com fatores de confusão foram declaradas?",
+    "Os grupos/participantes estavam livres do desfecho no início do estudo (ou no momento da exposição)?",
+    "Os desfechos foram medidos de maneira válida e confiável?",
+    "O tempo de seguimento foi relatado e foi suficiente para que os desfechos ocorressem?",
+    "O seguimento foi completo e, se não, as razões para perdas de seguimento foram descritas e exploradas?",
+    "Estratégias para lidar com seguimento incompleto foram utilizadas?",
+    "Foi utilizada análise estatística apropriada?"
+  ]
+}
