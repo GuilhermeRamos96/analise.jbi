@@ -1,12 +1,11 @@
 import streamlit as st
 import json
 import os
- # Removido checklist_utils
-
+ 
 st.set_page_config(page_title="Avaliação Crítica JBI", layout="wide")
 
-st.title("📄 Sistema de Avaliação Crítica de Artigos Científicos")
-st.markdown("Carregue um **artigo em PDF**, escolha o **delineamento metodológico** e preencha o **checklist interativo**.")
+st.title("📄 Sistema de Avaliação Crítica de Artigos Científicos - JBI")
+st.markdown("Escolha o **delineamento metodológico** e preencha o **checklist interativo**.")
 
 # Caminho para o arquivo JSON de checklists
 CHECKLIST_JSON_PATH = os.path.join('data', 'checklists.json')
