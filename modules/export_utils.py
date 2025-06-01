@@ -24,7 +24,7 @@ def export_summary_to_pdf(study_type, responses, info):
 
     # Title
     pdf.set_font("Arial", "B", 16)
-    pdf.cell(0, 15, "Resumo da Avaliacao Critica", ln=True, align="C")
+    pdf.cell(0, 15, "Resumo da Avaliação Crítica - Baseado na JBI", ln=True, align="C")
     pdf.ln(10)
 
     # Função para adicionar texto com quebra segura
@@ -54,7 +54,7 @@ def export_summary_to_pdf(study_type, responses, info):
     pdf.ln(5)
 
     # Informações do artigo
-    add_text_safe("Informacoes do Artigo:", bold=True)
+    add_text_safe("Informações do Artigo:", bold=True)
 
     info_labels = {
         'nome_examinador': 'Examinador',
