@@ -1,228 +1,195 @@
+# export_utils.py - Arquivo completo para substituir o existente
+
 from fpdf import FPDF
 import io
+import textwrap
 
-def test_pdf_generation():
-    """
-    Função para testar se o ambiente suporta geração de PDF
-    """
-    try:
-        pdf = FPDF()
-        pdf.add_page()
-        pdf.set_font("Arial", "B", 16)
-        pdf.cell(40, 10, "Teste")
-        
-        # Testar método 1
-        try:
-            buffer1 = io.BytesIO()
-            pdf.output(buffer1)
-            buffer1.seek(0)
-            print("✅ Método 1 (output direto) funciona")
-            return "metodo1"
-        except Exception as e:
-            print(f"❌ Método 1 falhou: {e}")
-        
-        # Testar método 2
-        try:
-            content = pdf.output(dest='S')
-            if content:
-                if isinstance(content, str):
-                    buffer2 = io.BytesIO(content.encode('latin1'))
-                else:
-                    buffer2 = io.BytesIO(content)
-                print("✅ Método 2 (dest='S') funciona")
-                return "metodo2"
-        except Exception as e:
-            print(f"❌ Método 2 falhou: {e}")
-        
-        # Testar método 3 (arquivo temporário)
-        try:
-            import tempfile
-            import os
-            temp_file = tempfile.NamedTemporaryFile(delete=False, suffix='.pdf')
-            pdf.output(temp_file.name)
-            with open(temp_file.name, 'rb') as f:
-                content = f.read()
-            os.unlink(temp_file.name)
-            buffer3 = io.BytesIO(content)
-            print("✅ Método 3 (arquivo temporário) funciona")
-            return "metodo3"
-        except Exception as e:
-            print(f"❌ Método 3 falhou: {e}")
-        
-        return None
-        
-    except Exception as e:
-        print(f"❌ Erro geral: {e}")
-        return None
+class CustomPDF(FPDF):
+    def footer(self):
+        self.set_y(-15)
+        self.set_font("Arial", "", 8)
+        self.set_text_color(100)
+        self.cell(0, 10, "Baseado nas ferramentas JBI: https://jbi.global/critical-appraisal-tools", 0, 0, "C")
 
-def export_guaranteed_pdf(study_type, responses, info):
+def export_summary_to_pdf(study_type, responses, info):
     """
-    Versão que se adapta ao seu ambiente
+    Função principal para gerar PDF - VERSÃO ROBUSTA
     """
-    # Descobrir qual método funciona
-    working_method = test_pdf_generation()
-    
-    if not working_method:
-        print("❌ ERRO: Nenhum método de PDF funciona no seu ambiente")
-        return None
-    
-    print(f"🔧 Usando {working_method} para gerar PDF")
-    
-    # Criar PDF principal
     pdf = FPDF(format='A4')
-    pdf.set_auto_page_break(auto=True, margin=15)
+    pdf.set_auto_page_break(auto=True, margin=20)
     pdf.add_page()
     
-    # Função para texto seguro (sem quebra de linha)
-    def safe_text(text, max_chars=80):
-        if not text:
-            return ""
-        text = str(text).replace('\n', ' ').replace('\r', ' ')
-        if len(text) > max_chars:
-            return text[:max_chars-3] + "..."
-        return text
+    # Configurações básicas
+    pdf.set_font("Arial", "", 12)
     
-    # Header
+    # Title
     pdf.set_font("Arial", "B", 16)
-    pdf.cell(0, 15, "Relatorio de Avaliacao", ln=True, align="C")
+    pdf.cell(0, 15, "Resumo da Avaliacao Critica", ln=True, align="C")
     pdf.ln(10)
     
+    # Função para adicionar texto com quebra segura
+    def add_text_safe(text, bold=False, indent=0):
+        style = "B" if bold else ""
+        pdf.set_font("Arial", style, 11)
+        
+        # Limpar e preparar texto
+        clean_text = str(text).strip()
+        if not clean_text:
+            return
+            
+        # Quebrar texto em linhas menores se necessário
+        max_chars = 90 - indent  # Ajustar por recuo
+        if len(clean_text) > max_chars:
+            lines = textwrap.wrap(clean_text, width=max_chars)
+        else:
+            lines = [clean_text]
+        
+        for line in lines:
+            if indent > 0:
+                line = " " * indent + line
+            pdf.cell(0, 7, line, ln=True)
+        pdf.ln(2)
+    
     # Tipo de estudo
-    pdf.set_font("Arial", "B", 12)
-    pdf.cell(0, 8, "Tipo de Estudo:", ln=True)
-    pdf.set_font("Arial", "", 11)
-    pdf.cell(0, 8, safe_text(study_type), ln=True)
+    add_text_safe("Tipo de Estudo:", bold=True)
+    add_text_safe(study_type)
     pdf.ln(5)
     
     # Informações do artigo
-    pdf.set_font("Arial", "B", 12)
-    pdf.cell(0, 8, "Informacoes do Artigo:", ln=True)
-    pdf.set_font("Arial", "", 11)
+    add_text_safe("Informacoes do Artigo:", bold=True)
     
-    info_map = {
+    info_labels = {
         'nome_examinador': 'Examinador',
-        'data_avaliacao': 'Data',
-        'titulo_artigo': 'Titulo',
-        'autor_artigo': 'Autor',
-        'ano_artigo': 'Ano'
+        'data_avaliacao': 'Data da Avaliacao',
+        'titulo_artigo': 'Titulo do Artigo', 
+        'autor_artigo': 'Autor do Artigo',
+        'ano_artigo': 'Ano do Artigo'
     }
     
-    for key, label in info_map.items():
-        value = safe_text(info.get(key, ''), 60)
-        pdf.cell(0, 6, f"{label}: {value}", ln=True)
+    for key, label in info_labels.items():
+        value = info.get(key, '')
+        add_text_safe(f"{label}: {value}")
     
     pdf.ln(8)
     
     # Checklist
-    pdf.set_font("Arial", "B", 12)
-    pdf.cell(0, 8, "Checklist:", ln=True)
-    pdf.ln(5)
+    add_text_safe("Checklist:", bold=True)
+    pdf.ln(3)
     
     for i, item in enumerate(responses):
-        # Verificar espaço na página
+        # Verificar se precisa de nova página
         if pdf.get_y() > 250:
             pdf.add_page()
         
         # Pergunta
-        pdf.set_font("Arial", "B", 11)
-        question = safe_text(item.get('question', ''), 70)
-        pdf.cell(0, 7, f"{i+1}. {question}", ln=True)
+        question = item.get('question', f'Pergunta {i+1}')
+        add_text_safe(f"{i+1}. {question}", bold=True)
         
         # Resposta
-        pdf.set_font("Arial", "", 10)
-        answer = safe_text(item.get('answer', ''), 60)
-        pdf.cell(0, 6, f"    Resposta: {answer}", ln=True)
+        answer = item.get('answer', 'Sem resposta')
+        add_text_safe(f"Resposta: {answer}", indent=4)
         
         # Comentário
-        snippet = safe_text(item.get('snippet', ''), 60)
-        pdf.cell(0, 6, f"    Comentario: {snippet}", ln=True)
-        pdf.ln(3)
+        snippet = item.get('snippet', '') or 'Sem comentario'
+        add_text_safe(f"Comentario: {snippet}", indent=4)
+        
+        pdf.ln(5)
         
         # Linha divisória
-        pdf.set_draw_color(200)
+        pdf.set_draw_color(200, 200, 200)
         pdf.line(20, pdf.get_y(), 190, pdf.get_y())
         pdf.ln(5)
     
-    # Gerar usando o método que funciona
+    # Gerar PDF com múltiplos métodos de fallback
     try:
-        if working_method == "metodo1":
-            buffer = io.BytesIO()
-            pdf.output(buffer)
-            buffer.seek(0)
-            return buffer
-            
-        elif working_method == "metodo2":
-            content = pdf.output(dest='S')
-            if isinstance(content, str):
-                return io.BytesIO(content.encode('latin1'))
-            else:
-                return io.BytesIO(content)
-                
-        elif working_method == "metodo3":
-            import tempfile
-            import os
-            temp_file = tempfile.NamedTemporaryFile(delete=False, suffix='.pdf')
-            pdf.output(temp_file.name)
-            with open(temp_file.name, 'rb') as f:
-                content = f.read()
-            os.unlink(temp_file.name)
-            return io.BytesIO(content)
-            
-    except Exception as e:
-        print(f"❌ Erro na geração final: {e}")
-        return None
-
-# Função de teste completa
-def test_complete_flow(study_type="Teste", responses=None, info=None):
-    """
-    Testa o fluxo completo
-    """
-    if responses is None:
-        responses = [
-            {
-                'question': 'Esta é uma pergunta de teste?',
-                'answer': 'Sim',
-                'snippet': 'Este é um comentário de teste'
-            }
-        ]
-    
-    if info is None:
-        info = {
-            'nome_examinador': 'Teste',
-            'data_avaliacao': '2024-01-01',
-            'titulo_artigo': 'Artigo de Teste',
-            'autor_artigo': 'Autor Teste',
-            'ano_artigo': '2024'
-        }
-    
-    print("🧪 Testando geração completa de PDF...")
-    buffer = export_guaranteed_pdf(study_type, responses, info)
-    
-    if buffer:
-        print("✅ PDF gerado com sucesso!")
-        print(f"📊 Tamanho: {len(buffer.getvalue())} bytes")
+        # Método 1: Output direto para string
+        pdf_content = pdf.output(dest='S')
+        pdf_buffer = io.BytesIO()
         
-        # Salvar arquivo de teste
+        if isinstance(pdf_content, str):
+            pdf_buffer.write(pdf_content.encode('latin1'))
+        else:
+            pdf_buffer.write(pdf_content)
+        
+        pdf_buffer.seek(0)
+        return pdf_buffer
+        
+    except Exception as e1:
         try:
-            with open("teste_pdf.pdf", "wb") as f:
-                f.write(buffer.getvalue())
-            print("💾 PDF salvo como 'teste_pdf.pdf'")
+            # Método 2: Output para BytesIO diretamente
+            pdf_buffer = io.BytesIO()
+            pdf.output(pdf_buffer)
+            pdf_buffer.seek(0)
+            return pdf_buffer
+            
+        except Exception as e2:
+            try:
+                # Método 3: Salvar temporário e ler
+                import tempfile
+                import os
+                
+                with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as tmp_file:
+                    pdf.output(tmp_file.name)
+                    
+                    with open(tmp_file.name, 'rb') as f:
+                        pdf_data = f.read()
+                    
+                    os.unlink(tmp_file.name)
+                    return io.BytesIO(pdf_data)
+                    
+            except Exception as e3:
+                print(f"Erro método 1: {e1}")
+                print(f"Erro método 2: {e2}")
+                print(f"Erro método 3: {e3}")
+                return None
+
+# Funções auxiliares para compatibilidade
+def save_pdf_to_file(study_type, responses, info, filename="relatorio.pdf"):
+    """
+    Salva PDF diretamente em arquivo
+    """
+    try:
+        pdf_buffer = export_summary_to_pdf(study_type, responses, info)
+        if pdf_buffer:
+            with open(filename, 'wb') as f:
+                f.write(pdf_buffer.getvalue())
+            print(f"PDF salvo como: {filename}")
             return True
-        except Exception as e:
-            print(f"❌ Erro ao salvar: {e}")
+        else:
+            print("Erro ao gerar PDF")
             return False
-    else:
-        print("❌ Falha na geração do PDF")
+    except Exception as e:
+        print(f"Erro ao salvar PDF: {e}")
         return False
 
-# Para usar:
-if __name__ == "__main__":
-    # Rodar teste
-    success = test_complete_flow()
-    
-    if success:
-        print("\n🎉 SUCESSO! O código está funcionando.")
-        print("Agora você pode usar export_guaranteed_pdf() com seus dados reais.")
-    else:
-        print("\n💔 FALHA! Há um problema no seu ambiente.")
-        print("Tente instalar: pip install fpdf2")
+def get_pdf_data(study_type, responses, info):
+    """
+    Retorna dados do PDF como bytes para download
+    """
+    pdf_buffer = export_summary_to_pdf(study_type, responses, info)
+    if pdf_buffer:
+        return pdf_buffer.getvalue()
+    return None
+
+# Para compatibilidade com Flask
+def get_pdf_response(study_type, responses, info, filename="relatorio.pdf"):
+    """
+    Retorna response do Flask para download
+    """
+    try:
+        from flask import send_file
+        pdf_buffer = export_summary_to_pdf(study_type, responses, info)
+        if pdf_buffer:
+            return send_file(
+                pdf_buffer,
+                as_attachment=True,
+                download_name=filename,
+                mimetype='application/pdf'
+            )
+        return None
+    except ImportError:
+        print("Flask não disponível")
+        return None
+    except Exception as e:
+        print(f"Erro no Flask response: {e}")
+        return None
