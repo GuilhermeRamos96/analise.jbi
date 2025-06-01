@@ -2,7 +2,10 @@ import streamlit as st
 import json
 import os
 import sys
-sys.path.append(os.path.join(os.path.dirname(__file__), 'modules'))  # Adiciona pasta modules ao path
+
+# Adiciona a pasta 'modules' ao caminho de importação
+sys.path.append(os.path.join(os.path.dirname(__file__), 'modules'))
+
 import export_utils
 
 st.set_page_config(page_title="Avaliação Crítica JBI", layout="wide")
