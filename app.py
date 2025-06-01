@@ -3,8 +3,10 @@ import json
 import os
 import sys
 
-# Adiciona a pasta 'modules' ao caminho de importação
-sys.path.append(os.path.join(os.path.dirname(__file__), 'modules'))
+# Adiciona a pasta 'modules' ao sys.path para permitir os imports
+modules_path = os.path.join(os.path.dirname(__file__), 'modules')
+if modules_path not in sys.path:
+    sys.path.append(modules_path)
 
 import export_utils
 
@@ -67,8 +69,7 @@ else:
                 with cols[0]:
                     answer = st.radio("Resposta:", ["Sim", "Não", "Incerteza", "Não aplicável"], key=f"resp_{option}_{i}")
                 with cols[1]:
-                    default_snippet = ""
-                    snippet = st.text_area("Comentário:", value=default_snippet, key=f"snip_{option}_{i}")
+                    snippet = st.text_area("Comentário:", value="", key=f"snip_{option}_{i}")
 
                 responses.append({
                     "question": question,
