@@ -1,7 +1,9 @@
 import streamlit as st
 import json
 import os
-import export_utils  # Adicionado import faltante
+import sys
+sys.path.append(os.path.join(os.path.dirname(__file__), 'modules'))  # Adiciona pasta modules ao path
+import export_utils
 
 st.set_page_config(page_title="Avaliação Crítica JBI", layout="wide")
 
