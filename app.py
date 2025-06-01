@@ -13,7 +13,7 @@ import export_utils
 st.set_page_config(page_title="Avaliação Crítica JBI", layout="wide")
 
 st.title("📄 Sistema de Avaliação Crítica de Artigos Científicos")
-st.markdown("Carregue um **artigo em PDF**, escolha o **delineamento metodológico** e preencha o **checklist interativo**.")
+st.markdown("Escolha o **delineamento metodológico** e preencha o **checklist interativo** baseado na JBI.")
 
 # Caminho para o arquivo JSON de checklists
 CHECKLIST_JSON_PATH = os.path.join('data', 'checklists.json')
