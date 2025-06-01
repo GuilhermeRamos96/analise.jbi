@@ -100,9 +100,10 @@ def export_summary_to_pdf(study_type, responses, info):
 
     pdf.set_font("Arial", "", 11)
     texto_referencia = (
-        "Este documento foi elaborado pelo 'avaliacriticajbi.streamlit.app/' com base nas Ferramentas de Avaliação Crítica da "
+        "Este documento foi elaborado pelo 'avaliacriticajbi' com base nas Ferramentas de Avaliação Crítica da "
         "Joanna Briggs Institute (JBI).\n\n"
         "Para mais informações, acesse: https://jbi.global/critical-appraisal-tools"
+        "APP, acesse: https://avaliacriticajbi.streamlit.app/"
     )
     pdf.multi_cell(0, 7, texto_referencia)
 
