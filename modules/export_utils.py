@@ -31,11 +31,11 @@ def export_summary_to_pdf(study_type, responses, info):
     pdf.set_font("DejaVu", "B", 11)
     pdf.cell(0, 8, "Informações do Artigo:", ln=True)
     pdf.set_font("DejaVu", "", 10)
-    pdf.cell(0, 8, f"Examinador: {info.get('nome_examinador', '')}", ln=True)
-    pdf.cell(0, 8, f"Data da avaliação: {info.get('data_avaliacao', '')}", ln=True)
-    pdf.cell(0, 8, f"Título do artigo: {info.get('titulo_artigo', '')}", ln=True)
-    pdf.cell(0, 8, f"Autor do artigo: {info.get('autor_artigo', '')}", ln=True)
-    pdf.cell(0, 8, f"Ano do artigo: {info.get('ano_artigo', '')}", ln=True)
+    pdf.multi_cell(0, 8, f"Examinador: {info.get('nome_examinador', '')}")
+    pdf.multi_cell(0, 8, f"Data da avaliação: {info.get('data_avaliacao', '')}")
+    pdf.multi_cell(0, 8, f"Título do artigo: {info.get('titulo_artigo', '')}")
+    pdf.multi_cell(0, 8, f"Autor do artigo: {info.get('autor_artigo', '')}")
+    pdf.multi_cell(0, 8, f"Ano do artigo: {info.get('ano_artigo', '')}")
     pdf.ln(5)
 
     # Checklist responses
@@ -45,10 +45,11 @@ def export_summary_to_pdf(study_type, responses, info):
 
     for i, item in enumerate(responses):
         pdf.set_font("DejaVu", "B", 10)
-        pdf.multi_cell(0, 7, f"{i + 1}. {item['question']}")
+        pdf.multi_cell(190, 7, f"{i + 1}. {item['question']}")
         pdf.set_font("DejaVu", "", 10)
-        pdf.multi_cell(0, 7, f"Resposta: {item['answer']}")
-        pdf.multi_cell(0, 7, f"Comentário: {item['snippet'].strip() if item['snippet'].strip() else 'Sem comentário.'}")
+        pdf.multi_cell(190, 7, f"Resposta: {item['answer']}")
+        snippet_text = item['snippet'].strip() if item['snippet'].strip() else 'Sem comentário.'
+        pdf.multi_cell(190, 7, f"Comentário: {snippet_text}")
         pdf.ln(3)
 
     # Output
