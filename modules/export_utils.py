@@ -11,50 +11,73 @@ class CustomPDF(FPDF):
 def export_summary_to_pdf(study_type, responses, info):
     pdf = CustomPDF(format='A4')
     pdf.set_auto_page_break(auto=True, margin=20)
-    pdf.set_margins(left=15, top=20, right=15)
+    pdf.set_margins(left=20, top=20, right=20)
     pdf.add_page()
 
-    # Add UTF-8 font support once
+    # Add UTF-8 font support
     pdf.add_font("DejaVu", "", "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", uni=True)
     pdf.add_font("DejaVu", "B", "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", uni=True)
 
     # Title
-    pdf.set_font("DejaVu", "B", 14)
-    pdf.cell(0, 10, "Resumo da Avaliação Crítica", ln=True, align="C")
-    pdf.ln(5)
+    pdf.set_font("DejaVu", "B", 16)
+    pdf.set_text_color(0)
+    pdf.cell(0, 12, "Resumo da Avaliação Crítica", ln=True, align="C")
+    pdf.ln(8)
 
     # Study type
+    pdf.set_font("DejaVu", "B", 12)
+    pdf.cell(0, 8, "Tipo de Estudo:", ln=True)
     pdf.set_font("DejaVu", "", 11)
-    pdf.multi_cell(0, 10, f"Tipo de Estudo: {study_type}", align="J")
-    pdf.ln(3)
-
-    # Article information
-    pdf.set_font("DejaVu", "B", 11)
-    pdf.cell(0, 8, "Informações do Artigo:", ln=True)
-    pdf.set_font("DejaVu", "", 10)
-    pdf.multi_cell(0, 8, f"Examinador: {info.get('nome_examinador', '')}", align="J")
-    pdf.multi_cell(0, 8, f"Data da avaliação: {info.get('data_avaliacao', '')}", align="J")
-    pdf.multi_cell(0, 8, f"Título do artigo: {info.get('titulo_artigo', '')}", align="J")
-    pdf.multi_cell(0, 8, f"Autor do artigo: {info.get('autor_artigo', '')}", align="J")
-    pdf.multi_cell(0, 8, f"Ano do artigo: {info.get('ano_artigo', '')}", align="J")
+    pdf.multi_cell(0, 7, study_type, align="L")
     pdf.ln(5)
 
+    # Article information
+    pdf.set_font("DejaVu", "B", 12)
+    pdf.cell(0, 8, "Informações do Artigo:", ln=True)
+    pdf.set_font("DejaVu", "", 11)
+    for key, label in [('nome_examinador', 'Examinador'),
+                       ('data_avaliacao', 'Data da Avaliação'),
+                       ('titulo_artigo', 'Título do Artigo'),
+                       ('autor_artigo', 'Autor do Artigo'),
+                       ('ano_artigo', 'Ano do Artigo')]:
+        value = info.get(key, '')
+        pdf.multi_cell(0, 6, f"{label}: {value}", align="L")
+    pdf.ln(8)
+
     # Checklist responses
-    pdf.set_font("DejaVu", "B", 11)
+    pdf.set_font("DejaVu", "B", 12)
     pdf.cell(0, 8, "Checklist:", ln=True)
-    pdf.ln(2)
+    pdf.ln(4)
+
+    indent = 10  # Recuo para respostas e comentários
 
     for i, item in enumerate(responses):
-        pdf.set_font("DejaVu", "B", 10)
-        pdf.multi_cell(0, 7, f"{i + 1}. {item['question']}", align="J")
-        pdf.set_font("DejaVu", "", 10)
-        pdf.multi_cell(0, 7, f"Resposta: {item['answer']}", align="J")
-        snippet_text = item['snippet'].strip() if item['snippet'].strip() else 'Sem comentário.'
-        pdf.multi_cell(0, 7, f"Comentário: {snippet_text}", align="J")
-        pdf.ln(3)
+        # Pergunta
+        pdf.set_font("DejaVu", "B", 11)
+        pdf.multi_cell(0, 6, f"{i + 1}. {item['question']}", align="L")
+
+        # Resposta (indentada)
+        pdf.set_font("DejaVu", "", 11)
+        pdf.set_x(pdf.l_margin + indent)
+        pdf.multi_cell(0, 6, f"Resposta: {item['answer']}", align="L")
+
+        # Comentário (indentado)
+        snippet_text = item['snippet'].strip() or 'Sem comentário.'
+        pdf.set_x(pdf.l_margin + indent)
+        pdf.multi_cell(0, 6, f"Comentário: {snippet_text}", align="L")
+        
+        pdf.ln(4)
+
+        # Linha divisória suave
+        pdf.set_draw_color(200, 200, 200)
+        pdf.set_line_width(0.2)
+        x_start = pdf.l_margin
+        x_end = pdf.w - pdf.r_margin
+        y = pdf.get_y()
+        pdf.line(x_start, y, x_end, y)
+        pdf.ln(4)
 
     # Output
     pdf_buffer = io.BytesIO()
     pdf.output(pdf_buffer)
     return pdf_buffer.getvalue()
-
