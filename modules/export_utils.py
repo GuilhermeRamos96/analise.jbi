@@ -28,5 +28,7 @@ def export_summary_to_pdf(study_type, responses, info):
         pdf.multi_cell(190, 8, f"   Comentário: {item['snippet'] if item['snippet'].strip() else 'Sem comentário.'}") 
         pdf.ln(3)
 
-    pdf_output = pdf.output(dest='S').encode("latin-1")
-    return pdf_output
+    # Use BytesIO to avoid .encode() error
+    pdf_buffer = io.BytesIO()
+    pdf.output(pdf_buffer)
+    return pdf_buffer.getvalue()
