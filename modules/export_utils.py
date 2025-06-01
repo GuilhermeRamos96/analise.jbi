@@ -100,9 +100,8 @@ def export_summary_to_pdf(study_type, responses, info):
 
     pdf.set_font("Arial", "", 11)
     texto_referencia = (
-        "Este documento foi elaborado com base nas Ferramentas de Avaliação Crítica da "
-        "Joanna Briggs Institute (JBI), reconhecidas internacionalmente por sua abordagem "
-        "estruturada e rigorosa na avaliação de evidências científicas.\n\n"
+        "Este documento foi elaborado pelo 'analise.jbi' com base nas Ferramentas de Avaliação Crítica da "
+        "Joanna Briggs Institute (JBI).\n\n"
         "Para mais informações, acesse: https://jbi.global/critical-appraisal-tools"
     )
     pdf.multi_cell(0, 7, texto_referencia)
